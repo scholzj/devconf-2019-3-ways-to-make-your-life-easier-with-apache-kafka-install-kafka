@@ -167,22 +167,36 @@ public class CdcService extends AbstractVerticle {
 
             String id = req.request().getParam("id");
 
-            String query = "DELETE FROM customers WHERE id=" + id;
+            String query1 = "DELETE FROM addresses WHERE customer_id=" + id;
+            String query2 = "DELETE FROM customers WHERE id=" + id;
 
             vertx.sharedData().getLockWithTimeout("sqlLock", 30000, locker -> {
                 if (locker.succeeded()) {
                     Lock lock = locker.result();
                     log.info("Deleting address " + id);
 
-                    sql.update(query, res2 -> {
+                    sql.update(query1, res2 -> {
                         if (res2.succeeded()) {
-                            UpdateResult result = res2.result();
-                            log.info("Deleted {} rows. New IDs {}", result.getUpdated(), result.getKeys());
+                            sql.update(query2, res3 -> {
+                                if (res3.succeeded()) {
+                                    UpdateResult result = res3.result();
+                                    log.info("Deleted {} rows. New IDs {}", result.getUpdated(), result.getKeys());
 
-                            req.response()
-                                    .setStatusCode(200)
-                                    .putHeader("content-type", "application/json; charset=utf-8")
-                                    .end();
+                                    req.response()
+                                            .setStatusCode(200)
+                                            .putHeader("content-type", "application/json; charset=utf-8")
+                                            .end();
+                                } else {
+                                    log.error("Failed to add address");
+
+                                    req.response()
+                                            .setStatusCode(400)
+                                            .putHeader("content-type", "application/json; charset=utf-8")
+                                            .end(new JsonObject().put("error", "Failed to delete address: " + res3.cause().getMessage()).encodePrettily());
+                                }
+
+                                lock.release();
+                            });
                         } else {
                             log.error("Failed to add address");
 
@@ -194,6 +208,7 @@ public class CdcService extends AbstractVerticle {
 
                         lock.release();
                     });
+
                 } else {
                     log.error("Failed to acquire lock", locker.cause());
 
@@ -205,7 +220,7 @@ public class CdcService extends AbstractVerticle {
             });
         });
 
-        router.get("/adressbook").handler(routingContext -> {
+        router.get("/addressbook").handler(routingContext -> {
             vertx.sharedData().getLockWithTimeout("sqlLock", 30000, locker -> {
                 if (locker.succeeded()) {
                     log.debug("I have a lock");
@@ -238,7 +253,7 @@ public class CdcService extends AbstractVerticle {
             });
         });
 
-        router.get("/adressbook/:id").handler(routingContext -> {
+        router.get("/addressbook/:id").handler(routingContext -> {
             vertx.sharedData().getLockWithTimeout("sqlLock", 30000, locker -> {
                 if (locker.succeeded()) {
                     log.debug("I have a lock");

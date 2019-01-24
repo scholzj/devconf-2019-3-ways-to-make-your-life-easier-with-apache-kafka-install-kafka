@@ -16,7 +16,7 @@ spec:
       containers:
       - name: reply-demo-eshop
         image: scholzj/devconf2019-consumer-init:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: BOOTSTRAP_SERVERS
             value: my-cluster-kafka-bootstrap:9092

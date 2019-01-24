@@ -18,7 +18,7 @@ spec:
       containers:
       - name: kafka-producer
         image: scholzj/devconf2019-replay-init:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: BOOTSTRAP_SERVERS
             value: my-cluster-kafka-bootstrap:9092

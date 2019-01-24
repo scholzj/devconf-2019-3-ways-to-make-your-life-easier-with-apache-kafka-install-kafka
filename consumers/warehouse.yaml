@@ -16,7 +16,7 @@ spec:
       containers:
       - name: consumer-demo-warehouse
         image: scholzj/devconf2019-consumer-warehouse:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: BOOTSTRAP_SERVERS
             value: my-cluster-kafka-bootstrap:9092

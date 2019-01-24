@@ -63,10 +63,32 @@ public class Consumer implements Runnable {
             for (ConsumerRecord<String, String> record : records)
             {
                 try {
-                    JSONObject order = (JSONObject) parser.parse(record.value());
-                    System.out.println("-I- generating invoice id " + order.get("id") + " for " + order.get("name") + " for " + order.get("price"));
+                    JSONObject id = (JSONObject) parser.parse(record.key());
+
+                    if (record.value() == null) {
+                        //System.out.println("-I- Tombstone for id " + id.get("id"));
+                        continue;
+                    }
+
+                    JSONObject cdc = (JSONObject) parser.parse(record.value());
+                    JSONObject before = (JSONObject) cdc.get("before");
+                    JSONObject after = (JSONObject) cdc.get("after");
+
+                    if (before == null) {
+                        System.out.println("-I- We have a new user " + after.get("first_name") + " " + after.get("last_name"));
+                    } else if (after == null)   {
+                        System.out.println("-I- User " + before.get("first_name") + " " + before.get("last_name") + " was deleted");
+                    } else  {
+                        if (!before.get("first_name").equals(after.get("first_name")) || !before.get("last_name").equals(after.get("last_name")))   {
+                            System.out.println("-I- User " + before.get("first_name") + " " + before.get("last_name") + " was renamed to " + after.get("first_name") + " " + after.get("last_name"));
+                        }
+
+                        if (!before.get("email").equals(after.get("email")))   {
+                            System.out.println("-I- User " + after.get("first_name") + " " + after.get("last_name") + " has now email address " + after.get("email"));
+                        }
+                    }
                 } catch (ParseException e) {
-                    System.out.println("-E- Failed to parse order: " +
+                    System.out.println("-E- Failed to parse contact: " +
                             "\n\t Topic: " + record.topic() +
                             "\n\t Partition: " + record.partition() +
                             "\n\t Offset: " + record.offset() +

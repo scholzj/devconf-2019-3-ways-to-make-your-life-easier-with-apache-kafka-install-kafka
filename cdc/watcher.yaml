@@ -2,27 +2,25 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: consumer-demo
-    component: orders
-  name: consumer-demo-orders
+    app: cdc-demo
+    component: watcher
+  name: cdc-demo-watcher
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: consumer-demo
-        component: orders
+        app: cdc-demo
+        component: watcher
     spec:
       containers:
-      - name: consumer-demo-orders
-        image: scholzj/devconf2019-consumer-orders:latest
+      - name: cdc-demo-watcher
+        image: scholzj/devconf2019-cdc-watcher:latest
         imagePullPolicy: IfNotPresent
         env:
           - name: BOOTSTRAP_SERVERS
             value: my-cluster-kafka-bootstrap:9092
           - name: TOPIC
-            value: consumer-demo
+            value: dbserver1.inventory.customers
           - name: GROUP_ID
-            value: consumer-demo-orders
-        ports:
-          - containerPort: 8080
+            value: consumer-demo-watcher

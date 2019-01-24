@@ -5,8 +5,8 @@ public class CdcServiceConfig {
     private final String dbName = "inventory";
     private final String dbHost = "mysql";
     private final String dbPort = "3306";
-    private final String dbUsername = "debezium";
-    private final String dbPassword = "dbz";
+    private final String dbUsername = "mysqluser";
+    private final String dbPassword = "mysqlpw";
 
     public CdcServiceConfig() {
     }
