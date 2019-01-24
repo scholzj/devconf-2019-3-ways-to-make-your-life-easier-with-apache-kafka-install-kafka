@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer-demo
+    component: invoicing
+  name: consumer-demo-invoicing
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: consumer-demo
+        component: invoicing
+    spec:
+      containers:
+      - name: consumer-demo-invoicing
+        image: scholzj/devconf2019-consumer-invoicing:latest
+        imagePullPolicy: Always
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: consumer-demo
+          - name: GROUP_ID
+            value: consumer-demo-invoicing
+        ports:
+          - containerPort: 8080

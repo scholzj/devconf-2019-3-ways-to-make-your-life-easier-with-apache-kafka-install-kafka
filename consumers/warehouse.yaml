@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer-demo
+    component: warehouse
+  name: consumer-demo-warehouse
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: consumer-demo
+        component: warehouse
+    spec:
+      containers:
+      - name: consumer-demo-warehouse
+        image: scholzj/devconf2019-consumer-warehouse:latest
+        imagePullPolicy: Always
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: consumer-demo
+          - name: GROUP_ID
+            value: consumer-demo-warehouse
+        ports:
+          - containerPort: 8080

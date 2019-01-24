@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: replay-demo
+    component: loader
+  name: reply-demo-loader
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: replay-demo
+        component: loader
+    spec:
+      containers:
+      - name: reply-demo-loader
+        image: scholzj/devconf2019-replay-loader:latest
+        imagePullPolicy: Always
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: replay-demo
+          - name: GROUP_ID
+            value: replay-demo-loader
+        ports:
+          - containerPort: 8080
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: reply-demo-loader
+  labels:
+    app: replay-demo
+    component: loader
+spec:
+  type: ClusterIP
+  ports:
+   - port: 8080
+  selector:
+    app: replay-demo
+    component: loader
+---
+
+apiVersion: v1
+kind: Route
+metadata:
+  name: reply-demo-loader
+spec:
+  to:
+    kind: Service
+    name: reply-demo-loader

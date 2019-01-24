@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: replay-demo
+    component: init
+  name: replay-demo-init
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 5
+  template:
+    metadata:
+    labels:
+      app: replay-demo-init
+      component: init
+    spec:
+      containers:
+      - name: kafka-producer
+        image: scholzj/devconf2019-replay-init:latest
+        imagePullPolicy: Always
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: replay-demo
+      restartPolicy: OnFailure

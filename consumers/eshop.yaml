@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer-demo
+    component: eshop
+  name: consumer-demo-eshop
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: consumer-demo
+        component: eshop
+    spec:
+      containers:
+      - name: reply-demo-eshop
+        image: scholzj/devconf2019-consumer-init:latest
+        imagePullPolicy: Always
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka-bootstrap:9092
+          - name: TOPIC
+            value: consumer-demo

@@ -1,0 +1,42 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnect
+metadata:
+  name: my-cluster-connect
+  labels:
+    app: kafka
+spec:
+  image: scholzj/devconf2019-cdc-connect:latest
+  replicas: 1
+  readinessProbe:
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  livenessProbe:
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+  bootstrapServers: my-cluster-kafka-bootstrap:9092
+  config:
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false
+---
+
+apiVersion: v1
+kind: Route
+metadata:
+  name: my-cluster-connect
+  labels:
+    app: kafka
+spec:
+  port:
+    targetPort: rest-api
+  to:
+    kind: Service
+    name: my-cluster-connect-connect-api
