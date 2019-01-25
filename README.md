@@ -1,4 +1,4 @@
-= DevConf.CZ 2019: 3 ways o make your life easier with Apache Kafka
+# DevConf.CZ 2019: 3 ways o make your life easier with Apache Kafka
 
 This repository contains the demos from my talk about Apache Kafka at [DevConf.CZ](https://devconf.info/cz).
 

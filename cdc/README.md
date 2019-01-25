@@ -1,4 +1,4 @@
-= Change Data Capture
+# Change Data Capture
 
 This demo shows how  Change Data Capture works using the [Debezium project](http://debezium.io)
 

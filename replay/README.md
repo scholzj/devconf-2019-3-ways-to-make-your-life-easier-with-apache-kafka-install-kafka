@@ -1,4 +1,4 @@
-= Message replay
+# Message replay
 
 This demo shows how to do message replay after a failed database.
 

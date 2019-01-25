@@ -1,4 +1,4 @@
-= Adding consumers
+# Adding consumers
 
 This demo show that you don't need to do anything to add additional services to your application landscape
 
