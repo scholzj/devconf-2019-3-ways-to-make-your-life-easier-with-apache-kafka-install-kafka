@@ -2,6 +2,8 @@
 
 This repository contains the demos from my talk about Apache Kafka at [DevConf.CZ](https://devconf.info/cz).
 
+Slides: [Google Docs](https://docs.google.com/presentation/d/1vSERve-BFoY7JkHLD_NdmQ7SlwbzuAudKrrA4W6xULM/edit?usp=sharing)
+
 Before running the different demos, you need:
 
 * Start your Minishift or `oc cluster up` OpenShfit cluster or connect to some other Kubernets or OpenShift environment
