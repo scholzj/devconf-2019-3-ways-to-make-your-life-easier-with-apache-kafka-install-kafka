@@ -6,7 +6,7 @@ curl -X POST \
     http://my-cluster-connect-myproject.127.0.0.1.nip.io/connectors -d @- <<'EOF'
 
 {
-    "name": "inventory-connector",
+    "name": "debezium-connector",
     "config": {
         "connector.class": "io.debezium.connector.mysql.MySqlConnector",
         "tasks.max": "1",
